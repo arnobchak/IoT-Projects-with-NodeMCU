@@ -1,6 +1,6 @@
 # IoT Projects with NodeMCU ESP8266 Arduino Board
 
-This repository contains multiple IoT projects using the **NodeMCU ESP8266** board to read data from various sensors and publish it to an MQTT broker for monitoring or control. The setup includes sensors for **light (LDR)**, **distance (Ultrasonic)**, **temperature and humidity (DHT22/11)**, **OLED display**, and **LED control**.
+This repository contains multiple IoT projects using the **NodeMCU ESP8266** board to read data from various sensors and publish it to an MQTT broker for monitoring or control. The setup includes sensors for **light (LDR)**, **distance (Ultrasonic)**, **temperature and humidity (DHT22/11)**, **OLED display**, **LED control**, **air quality monitoring**, **push buttons**, and **motion detection**.
 
 ## Project Overview
 
@@ -17,6 +17,9 @@ Each project involves connecting a specific sensor to the NodeMCU ESP8266, readi
   - [Temperature and Humidity Sensor (DHT22/11)](#temperature-and-humidity-sensor-dht22-11)
   - [OLED Display (128x64 I2C)](#oled-display-128x64-i2c)
   - [LED Control (3 LED Lights)](#led-control-3-led-lights)
+  - [Air Quality Sensor (MQ135)](#air-quality-sensor-mq135)
+  - [Push Buttons](#push-buttons)
+  - [MPU6050 Accelerometer and Gyroscope](#mpu6050-accelerometer-and-gyroscope)
 - [MQTT Setup](#mqtt-setup)
 - [License](#license)
 
@@ -31,6 +34,7 @@ Each project involves connecting a specific sensor to the NodeMCU ESP8266, readi
   - `PubSubClient.h`
   - `DHT.h` (for temperature and humidity)
   - `Adafruit_SSD1306.h` and `Adafruit_GFX.h` (for OLED display)
+  - `Wire.h` and `Adafruit_MPU6050.h` (for MPU6050)
 
 ## Hardware Components
 
@@ -40,6 +44,9 @@ Each project involves connecting a specific sensor to the NodeMCU ESP8266, readi
 - **DHT22/11** Temperature and Humidity sensor
 - **128x64 I2C OLED Display**
 - **3 LED lights** (for visual indicators)
+- **MQ135 Air Quality sensor**
+- **2 Push Buttons**
+- **MPU6050 Accelerometer and Gyroscope sensor**
 
 ## Setup
 
@@ -55,34 +62,49 @@ Each project involves connecting a specific sensor to the NodeMCU ESP8266, readi
 - **DHT22/11**: Data pin to `D4`.
 - **OLED Display**: SDA to `D2`, SCL to `D1`.
 - **LED Lights**: Connect each LED to a digital pin (e.g., `D7`, `D8`, `D9`).
+- **Air Quality Sensor (MQ135)**: Analog pin `A0` (if using LDR and MQ135 together, add an analog multiplexer).
+- **Push Buttons**: Connect to digital pins (e.g., `D10` and `D11`).
+- **MPU6050**: SDA to `D2`, SCL to `D1` (I2C bus, shared with OLED if applicable).
 
 ## Project Details
 
 ### Light Sensor (LDR)
 
-The **Light Dependent Resistor (LDR)** is connected to the analog pin `A0` and measures the ambient light level. The value is read and published to an MQTT topic `/ldr/value` every 2 seconds.
+The **Light Dependent Resistor (LDR)** measures ambient light and publishes the value to the MQTT topic `/ldr/value` every 2 seconds.
 
 ### Ultrasonic Sensor (HC-SR04)
 
-The **HC-SR04 Ultrasonic Sensor** measures distance and is connected via `D5` (Trigger) and `D6` (Echo). It publishes distance data to the MQTT topic `/ultrasonic/distance`.
+The **HC-SR04 Ultrasonic Sensor** measures distance and publishes data to the MQTT topic `/ultrasonic/distance`.
 
 ### Temperature and Humidity Sensor (DHT22/11)
 
-The **DHT22/11** sensor reads temperature and humidity and publishes the values to MQTT topics `/temperature/value` and `/humidity/value`. This sensor connects to `D4`.
+The **DHT22/11** sensor reads temperature and humidity, publishing values to MQTT topics `/temperature/value` and `/humidity/value`.
 
 ### OLED Display (128x64 I2C)
 
-The **OLED Display** shows sensor readings, making it easier to visualize data locally. The display is connected via I2C (SDA on `D2`, SCL on `D1`). You can update the display code to show the latest readings from each sensor.
+The **OLED Display** shows sensor readings locally. It can display multiple sensor readings by updating the code to read and print values from each sensor.
 
 ### LED Control (3 LED Lights)
 
-Three **LED lights** are connected to digital pins (e.g., `D7`, `D8`, `D9`) and are used as status indicators. They can be controlled through MQTT topics to signal various conditions, such as specific sensor thresholds.
+Three **LED lights** can be used as status indicators and controlled via MQTT topics to signal conditions, such as sensor thresholds or warnings.
+
+### Air Quality Sensor (MQ135)
+
+The **MQ135** Air Quality Sensor measures air quality (e.g., CO2 levels) and publishes the reading to the MQTT topic `/airquality/value`.
+
+### Push Buttons
+
+Two **push buttons** can be configured to send commands or control actions over MQTT, such as toggling LEDs, activating alerts, or triggering specific events.
+
+### MPU6050 Accelerometer and Gyroscope
+
+The **MPU6050** sensor measures acceleration and angular velocity, useful for detecting motion or orientation. The readings can be published to MQTT topics like `/mpu6050/accel` and `/mpu6050/gyro`.
 
 ## MQTT Setup
 
-1. Choose an MQTT broker, such as HiveMQ or Mosquitto. Update the MQTT broker address in each sketch with the broker IP or hostname.
-2. Define MQTT topics for each sensor as outlined in the project sections above.
-3. Monitor the data from each sensor in real-time using any MQTT client or create a dashboard using MQTT-compatible platforms like **Node-RED** or **Home Assistant**.
+1. Choose an MQTT broker, such as HiveMQ or Mosquitto. Update the MQTT broker address in each sketch.
+2. Define MQTT topics for each sensor as outlined in the project details.
+3. Monitor sensor data in real-time using an MQTT client or create a dashboard using platforms like **Node-RED** or **Home Assistant**.
 
 ## License
 
