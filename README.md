@@ -1,8 +1,9 @@
-NodeMCU ESP8266 IoT Projects with MQTT, ThingSpeak, and Node-RED
-This repository provides a collection of IoT projects using the NodeMCU ESP8266 board to interface with various sensors. It demonstrates how to read sensor data, publish it to an MQTT broker, visualize it on ThingSpeak, and control it through Node-RED. This setup enables real-time monitoring, remote control, and customized automation.
 
-Project Overview with Node-RED Integration
-Each project demonstrates connecting a sensor to the NodeMCU ESP8266, reading its data, and publishing it to an MQTT broker. With Node-RED, you can create interactive dashboards to monitor data and control devices, enhancing the monitoring and automation capabilities beyond basic MQTT and ThingSpeak.
+IoT Projects with NodeMCU ESP8266 Arduino Board
+This repository features a collection of IoT projects using the NodeMCU ESP8266 board to gather data from various sensors and publish it to an MQTT broker for monitoring and control. Additionally, data visualization and control dashboards are implemented with Node-RED and ThingSpeak for seamless real-time monitoring.
+
+Project Overview
+Each project involves connecting specific sensors to the NodeMCU ESP8266, reading data from these sensors, and then publishing the information to an MQTT broker. Node-RED and ThingSpeak platforms enable real-time data visualization and interactive control.
 
 Table of Contents
 Requirements
@@ -12,110 +13,83 @@ Project Details
 Light Sensor (LDR)
 Ultrasonic Sensor (HC-SR04)
 Temperature and Humidity Sensor (DHT22/11)
+Air Quality Sensor
+MPU6050 Sensor (Gyroscope and Accelerometer)
 OLED Display (128x64 I2C)
+Push Buttons (2)
 LED Control (3 LED Lights)
-Air Quality Sensor (MQ135)
-Push Buttons
-MPU6050 Accelerometer and Gyroscope
-MQTT Setup
-Node-RED Setup
-ThingSpeak Integration
+Node-RED and ThingSpeak Integration
 License
 Requirements
-Arduino IDE (configured for the ESP8266 board)
-MQTT Broker (e.g., HiveMQ, Mosquitto)
-ThingSpeak account (for cloud-based data visualization)
-Node-RED (for interactive dashboards and automation)
-Required Libraries
-ESP8266WiFi.h
-PubSubClient.h
-DHT.h (for temperature and humidity sensors)
+Arduino IDE (configured with the ESP8266 board)
+MQTT Broker (e.g., HiveMQ, Mosquitto, or any other broker)
+Node-RED for real-time dashboards
+ThingSpeak for online data storage and analysis
+Libraries:
+ESP8266WiFi.h for WiFi functionality
+PubSubClient.h for MQTT functionality
+DHT.h (for temperature and humidity)
 Adafruit_SSD1306.h and Adafruit_GFX.h (for OLED display)
-Wire.h and Adafruit_MPU6050.h (for MPU6050 sensor)
+MPU6050.h for gyroscope and accelerometer functionality
 Hardware Components
 NodeMCU ESP8266 board
-Various sensors (LDR, HC-SR04, DHT22/11, MQ135, MPU6050)
-OLED Display (128x64 I2C)
-LEDs (3 lights for visual indicators)
-Push Buttons
+LDR (Light Dependent Resistor) sensor
+HC-SR04 Ultrasonic sensor
+DHT22/11 Temperature and Humidity sensor
+Air Quality sensor
+MPU6050 Gyroscope and Accelerometer sensor
+128x64 I2C OLED Display
+2 Push Buttons for user control
+3 LED lights for visual indicators
 Setup
-Connect each sensor to the NodeMCU ESP8266 using the pin configurations provided.
-Install required libraries in the Arduino IDE.
-Configure WiFi, MQTT, and ThingSpeak settings in each Arduino sketch as specified.
-Upload the sketches to the NodeMCU and monitor data through MQTT, Node-RED, or ThingSpeak.
-Node-RED Setup
-Step 1: Install Node-RED
-Install Node-RED on your computer, Raspberry Pi, or server by following the Node-RED installation guide.
-Start Node-RED by running:
-bash
-Copy code
-node-red
-Access the Node-RED editor at http://localhost:1880.
-Step 2: Add Required Nodes
-Open the Node-RED editor, go to Manage Palette.
-Install these nodes:
-node-red-dashboard (for UI elements)
-node-red-contrib-mqtt-broker (if using an embedded MQTT broker)
-Step 3: Create a Flow for Sensor Data
-Use MQTT input nodes for each sensor topic (e.g., /ldr/value, /temperature/value) to receive data.
-Add UI elements such as gauges, charts, or text nodes to display data.
-Link MQTT output nodes for control actions (e.g., toggling LEDs) via topics like /led/control.
-Step 4: Set Up Automation
-Define custom rules in Node-RED:
-
-Use switch nodes for condition-based actions (e.g., turning on LEDs if the light level is low).
-Trigger notifications when air quality is below a threshold.
-Example Flow:
-
-plaintext
-Copy code
-MQTT Input Node (/ldr/value) --> Switch Node (Threshold) --> LED Control (via MQTT Output)
-Optional: Send Data to ThingSpeak via Node-RED
-You can also push data to ThingSpeak from Node-RED:
-
-Use HTTP request nodes to call the ThingSpeak API.
-Configure periodic updates or trigger updates based on conditions.
-Example Node-RED Dashboard Setup
-An example dashboard could include:
-
-A gauge for light levels from the LDR.
-A chart to track temperature and humidity over time.
-Controls for LEDs and alerts based on sensor thresholds.
+Connect each sensor to the NodeMCU ESP8266 according to the pin configurations below.
+Install necessary libraries in the Arduino IDE.
+Configure WiFi, MQTT, and ThingSpeak settings in each Arduino sketch.
+Upload the sketches to the NodeMCU and monitor the data in Node-RED or ThingSpeak.
+Pin Configurations
+LDR: Connect to analog pin A0.
+Ultrasonic Sensor: Trigger pin to D5, Echo pin to D6.
+DHT22/11: Data pin to D4.
+Air Quality Sensor: Analog pin A0.
+MPU6050: SDA to D2, SCL to D1.
+OLED Display: SDA to D2, SCL to D1.
+Push Buttons: Connect to digital pins D7 and D8.
+LED Lights: Connect each LED to a digital pin (e.g., D9, D10, D11).
 Project Details
 Light Sensor (LDR)
-The LDR measures ambient light and publishes the value to the MQTT topic /ldr/value every 2 seconds. Data is also sent to ThingSpeak for real-time and historical analysis.
+The Light Dependent Resistor (LDR) is connected to analog pin A0 and measures ambient light levels. The value is published to an MQTT topic /ldr/value every 2 seconds for monitoring light intensity.
 
 Ultrasonic Sensor (HC-SR04)
-The HC-SR04 measures distance and publishes data to /ultrasonic/distance, as well as to ThingSpeak.
+The HC-SR04 Ultrasonic Sensor measures distance and is connected via D5 (Trigger) and D6 (Echo). It publishes distance data to the MQTT topic /ultrasonic/distance.
 
 Temperature and Humidity Sensor (DHT22/11)
-The DHT22/11 publishes temperature and humidity data to MQTT topics /temperature/value and /humidity/value, and ThingSpeak can monitor these parameters as well.
+The DHT22/11 sensor reads temperature and humidity and publishes these values to MQTT topics /temperature/value and /humidity/value. This sensor connects to D4.
+
+Air Quality Sensor
+The Air Quality Sensor monitors the surrounding air quality and publishes an analog reading to an MQTT topic /air_quality/value. The sensor connects to A0.
+
+MPU6050 Sensor (Gyroscope and Accelerometer)
+The MPU6050 Gyroscope and Accelerometer provide orientation data, which includes pitch, roll, and yaw values. Data is published to the MQTT topic /gyroscope/data. The MPU6050 is connected via I2C.
 
 OLED Display (128x64 I2C)
-The OLED Display locally shows sensor readings. Code can be adjusted to display multiple sensor values.
+The OLED Display shows sensor readings, making it easier to visualize data locally. It’s connected via I2C (SDA on D2, SCL on D1). The display can be configured to show the latest readings from each sensor.
+
+Push Buttons (2)
+Two push buttons are connected to digital pins D7 and D8. These buttons can trigger specific actions or data publication events based on user input.
 
 LED Control (3 LED Lights)
-The LEDs act as visual indicators and can be controlled via MQTT topics for conditions like thresholds or warnings.
+Three LED lights are connected to digital pins (e.g., D9, D10, D11) and can serve as status indicators. LEDs can be controlled via MQTT topics to signal specific sensor conditions or thresholds.
 
-Air Quality Sensor (MQ135)
-The MQ135 measures air quality, such as CO2 levels, and publishes to /airquality/value. ThingSpeak can track trends in air quality over time.
+Node-RED and ThingSpeak Integration
+Node-RED:
 
-Push Buttons
-Two push buttons can be configured to control actions over MQTT, such as toggling LEDs, triggering alerts, or initiating events.
+Use MQTT nodes to subscribe to data from each sensor.
+Configure gauge and chart nodes to create a real-time dashboard.
+Push Buttons can be monitored to trigger Node-RED flows for automation or alerts.
+ThingSpeak:
 
-MPU6050 Accelerometer and Gyroscope
-The MPU6050 provides acceleration and angular velocity data, publishing to /mpu6050/accel and /mpu6050/gyro. ThingSpeak channels can be set up for motion analysis.
-
-MQTT Setup
-Select an MQTT broker, such as HiveMQ or Mosquitto, and update the broker address in each sketch.
-Define MQTT topics for each sensor as per project details.
-Use an MQTT client or create a dashboard with Node-RED or Home Assistant to monitor data in real-time.
-ThingSpeak Integration
-Create a ThingSpeak account and channels for each sensor.
-Set up fields in each channel for specific sensor data (e.g., temperature, humidity, light, air quality).
-In each Arduino sketch, configure ThingSpeak settings:
-Include the WiFiClient library and set up the API key for each ThingSpeak channel.
-Use ThingSpeak’s writeField or writeMultipleFields functions to send sensor data.
-Visualize data by creating widgets and charts on the ThingSpeak dashboard.
+Register an account and create a new channel for each sensor type.
+Use ThingSpeak.begin() in the Arduino sketch to send data to the ThingSpeak platform for long-term storage and trend analysis.
+ThingSpeak channels will visualize data trends and patterns over time, providing valuable insights.
 License
-This project is open-source under the MIT License. Contributions and improvements are welcome!
+This project is open-source under the MIT License. Contributions and improvements are welcome.
